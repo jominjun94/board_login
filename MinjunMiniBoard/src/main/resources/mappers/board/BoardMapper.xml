@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <!--  빈등록하기 iboradmapper -->
+<mapper namespace="com.spring.board.board.repository.IBoardMapper">
+
+<resultMap id = "BoardMap" type ="com.spring.board.board.model.BoardVO">
+
+	<id property="boardNo" column="board_no"/>	
+	<result property="writer" column="writer"/>
+	<result property="title" column="title"/>
+	<result property="content" column="content"/>
+	<result property="regDate" column="reg_date"/>
+	<result property="viewCnt" column="view_cnt"/>
+
+</resultMap>
+
+
+<select id="getArticleList" resultMap="BoardMap">
+
+	select *
+	from minjun_mini
+	<if test="condition == 'title'">
+		WHERE title LIKE CONCAT('%', #{keyword},'%')
+		</if>
+		<if test="condition == 'writer'">
+		WHERE writer LIKE CONCAT('%', #{keyword},'%')
+		</if>
+		<if test="condition == 'content'">
+		WHERE content LIKE CONCAT('%', #{keyword},'%')
+		</if>
+		<if test="condition == 'titleContent'">
+		WHERE title LIKE CONCAT('%', #{keyword},'%')
+		 OR content LIKE CONCAT('%', #{keyword},'%')
+		</if>
+	order by board_no DESC
+	limit #{pageStart}, #{countPerPage}
+
+</select>
+
+
+
+<select id="getTotalCount" resultType = "int">
+		SELECT COUNT(*) 
+		FROM minjun_mini
+		<if test="condition == 'title'">
+		WHERE title LIKE CONCAT('%', #{keyword},'%')
+		</if>
+		<if test="condition == 'writer'">
+		WHERE writer LIKE CONCAT('%', #{keyword},'%')
+		</if>
+		<if test="condition == 'content'">
+		WHERE content LIKE CONCAT('%', #{keyword},'%')
+		</if>
+		<if test="condition == 'titleContent'">
+		WHERE title LIKE CONCAT('%', #{keyword},'%')
+		 OR content LIKE CONCAT('%', #{keyword},'%')
+		</if>
+
+</select>
+
+
+</mapper>
